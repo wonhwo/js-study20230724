@@ -30,3 +30,6 @@ let m =8;
 m++;
 console.log(`m: ${m}`);
 console.log(`z: ${z}`);
+
+const str='hello' *5.5;
+console.log(`str: ${str}`);
