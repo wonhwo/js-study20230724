@@ -25,10 +25,16 @@ while(true){
     }
     else
         alert('값이 범위를 넘었습니다.');
-    }
+}
 
 while(true){
     let b = +prompt(`${c}~${d}까지의 숫자를 입력해서 정답을 맞춰주세요!`);
+    a--;
+    if(b<c||b>d){
+        alert('범위를 넘었습니다.');
+        a++;
+        continue;
+    }
     
     if(rn===b){
         alert('정답입니다.');
@@ -39,16 +45,16 @@ while(true){
         break;
     }
     else if(rn>b){
-        c=b;
+        c=b-1;
         alert('up');
-        alert(`${a-1}번 남았습니다.`); 
+        alert(`${a}번 남았습니다.`); 
     }
     else if(rn<b){
-        d=b;
+        d=b-1;
         alert('down');
-        alert(`${a-1}번 남았습니다.`);
+        alert(`${a}번 남았습니다.`);
     }
-    a--;
+    
 }
     
 
