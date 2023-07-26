@@ -24,7 +24,7 @@ while(true){
         break;
     }
     else
-        alert('값이 범위를 넘었습니다.');
+        alert('값이 범위를 넘었습니다. 다시 입력해주세요');
 }
 
 while(true){
