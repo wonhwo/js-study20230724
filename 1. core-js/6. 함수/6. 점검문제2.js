@@ -10,7 +10,7 @@ function calcNumbersTotalAndAverage(...result) {
         total+=n;
     }
     return{
-        total:total,
+        total,
         avg:total/result.length
     }
 }

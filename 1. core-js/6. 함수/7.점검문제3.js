@@ -15,8 +15,8 @@ var myBmi = calcBMI(h, w);
 console.log(`키 -> ${h}cm, 체중 -> ${w}kg의 체질량지수는 ${round(myBmi,2)}입니다.`);
 
 function calcBMI(h,w) {
-    let bmi=(w/h**2)*10000;
-    console.log(bmi);
+    let m= h/100;
+    let bmi=w/(m*m);
     if(bmi>25.0){
         console.log('당신은 과체중입니다.');
     }
