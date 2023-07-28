@@ -48,8 +48,11 @@ const traders = [
       value: 780000,
     },
   ];
-  let sum=0;
-  const lineDraw = ()=>console.log('=============================');
+  let sum=0,count=0;
+  const lineDraw = ()=>{
+    count++;
+    return console.log(`================연습${count}================`);
+  }
   // 연습 1: 2022년에 발생한 모든 거래를 찾아 
   //   거래자 정보(이름, 도시)를 배열에 매핑해주세요 
 lineDraw();
@@ -82,7 +85,7 @@ const allName = traders.map(n=>n.trader.name)
 console.log(allName);
   
   // 연습 5: 서울에 사는 거래자의 모든 거래액의 총합 출력.
-  lineDraw();
+lineDraw();
 traders
   .filter(n=>n.trader.city==="서울")
   .map(n=>n.value)
