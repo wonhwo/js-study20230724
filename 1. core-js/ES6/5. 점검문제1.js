@@ -59,7 +59,7 @@ lineDraw();
 
 const y2022Traders  = traders
     .filter(n=>n.year===2022)
-    .map(n=>n.trader)
+    .map(n=>n.trader);
 console.log(y2022Traders);
   
   // 연습 2: 거래자가 근무하는 모든 도시이름을 배열에 담아주세요.
@@ -77,21 +77,23 @@ const daejeonTraders = traders
 
 console.log(daejeonTraders);
 
-  
-  
   // 연습 4: 모든 거래자의 이름을 배열에 모아주세요.
   lineDraw();
 const allName = traders.map(n=>n.trader.name)
-console.log(allName);
+console.log(... new Set (allName));
   
   // 연습 5: 서울에 사는 거래자의 모든 거래액의 총합 출력.
 lineDraw();
-traders
+// traders
+//   .filter(n=>n.trader.city==="서울")
+//   .map(n=>n.value)
+//   .forEach(n=>sum+=n);
+
+// reduce함수: 배열을 반복해서 각 요소에 콜백함수를 적용한결과를 누적하는 함수
+sum= traders
   .filter(n=>n.trader.city==="서울")
-  .map(n=>n.value)
-  .forEach(n=>{
-    sum+=n;
-  });
+  .reduce((acc,curr)=> acc + curr.value,0);
+
   console.log(`서울 거래액 총액: ${sum}원`);
   
   
