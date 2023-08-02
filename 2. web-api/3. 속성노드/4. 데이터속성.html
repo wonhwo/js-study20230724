@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <ul class="users">
+        <li data-user-number="4321" data-role="common">뻐러러</li>
+        <li data-user-number="9999" data-role="admin">핑구</li>
+    </ul>
+
+    <script>
+        const[$ul,$ul2]=[...document.querySelectorAll('.users li')];
+
+        const pororoNumber = $ul.dataset.userNumber;
+        console.log(+pororoNumber);
+
+        const pingguRole = $ul2.dataset.role;
+        console.log(pingguRole);
+
+        $ul.dataset.role='gold';//수정
+
+        $ul.dataset.phoneNumber = '010-1234-4567'; //추가 
+        delete $ul.dataset.userNumber;//삭제
+
+    </script>
+</body>
+</html>
