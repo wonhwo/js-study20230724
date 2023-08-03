@@ -6,6 +6,10 @@ const $deleteMovieModal = document.getElementById("delete-modal");
 const $addMovieButton = document.querySelector("header button");
 const $backdrop = document.getElementById("backdrop");
 
+// 영화 취소 수락 버튼
+const $cancelButton = document.getElementById("delete-button");
+const $successButton = document.getElementById("success-button");
+
 // 영화 추가 모달안에 있는 확인, 취소버튼
 const $cancelAddMovieButton = $addMovieModal.querySelector(".btn--passive");
 const $confirmAddMovieButton = $cancelAddMovieButton.nextElementSibling;
@@ -15,10 +19,16 @@ const $userInputs = [...$addMovieModal.querySelectorAll("input")];
 const [$titleInput, $imgUrlInput, $ratingInput] = $userInputs;
 const $entryTextSection = document.getElementById("entry-text");
 
+// 엔트리 텍스트
+const $entryText = document.getElementById("entry-text");
 // 영화목록 ul태그
 const $movieList = document.getElementById("movie-list");
 
+// 삭제  모달
+const $deleteModal = document.getElementById("delete-modal");
+
 const CLASS_VISIBLE = "visible";
+const CLASS_DLETE = "delete-modal";
 
 // 영화 정보 목록 배열
 const movies = [];
@@ -36,6 +46,16 @@ const closeAddModal = () => {
   $addMovieModal.classList.remove(CLASS_VISIBLE);
   clearMovieModalInput();
 };
+// 삭제 모달을 여는 핸들러
+const showDeleteModalHandler = () => {
+  $deleteModal.classList.add(CLASS_DLETE);
+  $backdrop.classList.add(CLASS_VISIBLE);
+};
+//   삭제 모달을 닫는 함수
+const closeDeleteModalHandler = () => {
+  $deleteModal.classList.remove(CLASS_DLETE);
+  $backdrop.classList.remove(CLASS_VISIBLE);
+};
 
 // 화면에 새로운 영화 정보를 렌더링하는 함수
 const renderNewMovie = ({ id, title, image, rating }) => {
@@ -49,40 +69,27 @@ const renderNewMovie = ({ id, title, image, rating }) => {
     <div class="movie-element__info">
       <h2>${title}</h2>
       <p>${rating} / 5</p>
-    </div>
-  `;
+    </div>`;
 
-  //   삭제 진행 핸들러
-  const deleteMovieHandler = (e) => {
-    // 배열에서 영화 정보 지우기
-    // 클릭한 태그 근처 li의 movie-id값 가져오깅
+  // 삭제 클릭 이벤트
+  $newMovie.onclick = (e) => {
+    showDeleteModalHandler();
     const movieId = e.target.closest(".movie-element").dataset.movieId;
     console.log(movieId);
-
-    // 배열에서 해당 아이디 값을 가진 객체를 찾기
-    // 방법 1 (for문 노가다)
-    // let index= -1;
-    // for(let i = 0;i<movies.length;i++){
-    //     if(movies[i].id===movieId){
-    //         index=i;
-    //         break;
-    //     }
-    // }
-
-    // 방법 2
-    // indexOf: 원시타입(숫자, 문자열)만 찾을 수 있당.
-    // findIndex: 배열 고차함수
     const index = movies.findIndex((m) => m.id === movieId);
     console.log(`클릭 대상 인덱스: ${index}`);
-    // id 값이 객체 배열에서 지우기<- 인덱스 값을 알아야 함.
-    movies.splice(index, 1);
-
-    // li지우기
-    e.target.closest(".movie-element").remove();
+    $successButton.addEventListener("click", () => {
+      movies.splice(index, 1);
+      e.target.closest(".movie-element").remove();
+      closeDeleteModalHandler();
+      console.log();
+      if (movies.length === 0) {
+        $entryText.classList.remove("delete-card");
+      }
+    });
   };
-  // 삭제 클릭 이벤트
-  $newMovie.addEventListener("click", deleteMovieHandler);
 
+  $entryText.classList.add("delete-card");
   $movieList.appendChild($newMovie);
 };
 // 영화 정보 입력란 검증
@@ -139,6 +146,7 @@ const showMovieModalHandler = (e) => {
 // 백드롭 영역을 클릭하면 모달이 닫히는 핸들러
 const backdropHandler = (e) => {
   closeAddModal();
+  closeDeleteModalHandler();
 };
 // 영화 추가 모달창의 취소버튼을 누르면 모달이 닫히는 핸들러
 const closeMovieModalHandler = (e) => {
@@ -156,3 +164,5 @@ $cancelAddMovieButton.addEventListener("click", closeMovieModalHandler);
 
 // Add Movie모달 추가버튼 클릭이벤트
 $confirmAddMovieButton.addEventListener("click", addMovieHandler);
+// 취소 모델 취소버튼
+$cancelButton.addEventListener("click", closeDeleteModalHandler);
