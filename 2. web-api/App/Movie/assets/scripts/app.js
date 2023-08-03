@@ -29,6 +29,7 @@ const $deleteModal = document.getElementById("delete-modal");
 
 const CLASS_VISIBLE = "visible";
 const CLASS_DLETE = "delete-modal";
+const DELETE_CARD = "delete-card";
 
 // 영화 정보 목록 배열
 const movies = [];
@@ -38,23 +39,6 @@ const movies = [];
 // 모든 인풋을 리셋하는 함수
 const clearMovieModalInput = () => {
   $userInputs.forEach(($input) => ($input.value = ""));
-};
-
-// 영화추가모달을 닫는 함수
-const closeAddModal = () => {
-  $backdrop.classList.remove(CLASS_VISIBLE);
-  $addMovieModal.classList.remove(CLASS_VISIBLE);
-  clearMovieModalInput();
-};
-// 삭제 모달을 여는 핸들러
-const showDeleteModalHandler = () => {
-  $deleteModal.classList.add(CLASS_DLETE);
-  $backdrop.classList.add(CLASS_VISIBLE);
-};
-//   삭제 모달을 닫는 함수
-const closeDeleteModalHandler = () => {
-  $deleteModal.classList.remove(CLASS_DLETE);
-  $backdrop.classList.remove(CLASS_VISIBLE);
 };
 
 // 화면에 새로운 영화 정보를 렌더링하는 함수
@@ -70,26 +54,33 @@ const renderNewMovie = ({ id, title, image, rating }) => {
       <h2>${title}</h2>
       <p>${rating} / 5</p>
     </div>`;
-
   // 삭제 클릭 이벤트
   $newMovie.onclick = (e) => {
     showDeleteModalHandler();
     const movieId = e.target.closest(".movie-element").dataset.movieId;
-    console.log(movieId);
     const index = movies.findIndex((m) => m.id === movieId);
-    console.log(`클릭 대상 인덱스: ${index}`);
-    $successButton.addEventListener("click", () => {
+    const remove_list = () => {
+      console.log($movieList.firstElementChild);
+
       movies.splice(index, 1);
       e.target.closest(".movie-element").remove();
+      if ($movieList.firstElementChild === null) {
+        $entryText.classList.remove(DELETE_CARD);
+      }
       closeDeleteModalHandler();
-      console.log();
-      if (movies.length === 0) {
-        $entryText.classList.remove("delete-card");
+      console.log(movies);
+    };
+    document.addEventListener("keydown", (e) => {
+      if (
+        e.key === "Enter" &&
+        $deleteModal.classList.contains("delete-modal")
+      ) {
+        remove_list();
       }
     });
+    $successButton.addEventListener("click", remove_list);
   };
-
-  $entryText.classList.add("delete-card");
+  $entryText.classList.add(DELETE_CARD);
   $movieList.appendChild($newMovie);
 };
 // 영화 정보 입력란 검증
@@ -152,7 +143,23 @@ const backdropHandler = (e) => {
 const closeMovieModalHandler = (e) => {
   closeAddModal();
 };
-
+// 영화추가모달을 닫는 함수
+const closeAddModal = () => {
+  $backdrop.classList.remove(CLASS_VISIBLE);
+  $addMovieModal.classList.remove(CLASS_VISIBLE);
+  clearMovieModalInput();
+};
+// 삭제 모달을 여는 핸들러
+const showDeleteModalHandler = () => {
+  $deleteModal.classList.add(CLASS_DLETE);
+  $backdrop.classList.add(CLASS_VISIBLE);
+};
+//   삭제 모달을 닫는 핸들러
+const closeDeleteModalHandler = () => {
+  $deleteModal.classList.remove(CLASS_DLETE);
+  $backdrop.classList.remove(CLASS_VISIBLE);
+};
+// ===== 클릭 이벤트 ===== //
 // Add movie버튼 클릭이벤트
 $addMovieButton.addEventListener("click", showMovieModalHandler);
 
@@ -164,5 +171,5 @@ $cancelAddMovieButton.addEventListener("click", closeMovieModalHandler);
 
 // Add Movie모달 추가버튼 클릭이벤트
 $confirmAddMovieButton.addEventListener("click", addMovieHandler);
-// 취소 모델 취소버튼
+// 취소 모델 취소버튼 클릭이벤트
 $cancelButton.addEventListener("click", closeDeleteModalHandler);
