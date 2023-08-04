@@ -57,11 +57,11 @@ const renderNewMovie = ({ id, title, image, rating }) => {
   // 삭제 클릭 이벤트
   $newMovie.onclick = (e) => {
     showDeleteModalHandler();
-    const movieId = e.target.closest(".movie-element").dataset.movieId;
-    const index = movies.findIndex((m) => m.id === movieId);
-    const remove_list = () => {
-      console.log($movieList.firstElementChild);
 
+    const remove_list = () => {
+      const movieId = e.target.closest(".movie-element").dataset.movieId;
+      const index = movies.findIndex((m) => m.id === movieId);
+      console.log($movieList.firstElementChild);
       movies.splice(index, 1);
       e.target.closest(".movie-element").remove();
       if ($movieList.firstElementChild === null) {
@@ -71,10 +71,7 @@ const renderNewMovie = ({ id, title, image, rating }) => {
       console.log(movies);
     };
     document.addEventListener("keydown", (e) => {
-      if (
-        e.key === "Enter" &&
-        $deleteModal.classList.contains("delete-modal")
-      ) {
+      if (e.key === "Enter"&& $deleteModal.classList.contains('delete-modal')) {
         remove_list();
       }
     });
