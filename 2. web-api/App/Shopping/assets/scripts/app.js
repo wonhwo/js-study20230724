@@ -50,6 +50,14 @@ class ProductItem{
         this.product=product;
     }
 
+    // 담기버튼 클릭이벤트 핸들러
+    addToCartHandler(){
+        console.log('장바구니');
+        console.log(this.product);
+        // 이 핸들러에서 누른 그 상품의 정보를 알아야 한다.
+
+    }
+
     render(){
         const $prod = document.createElement("li");
         $prod.classList.add("product-item");
@@ -63,52 +71,56 @@ class ProductItem{
               <button>담기</button>
             </div>
           </div>`;
+          const $addCartBtn = $prod.querySelector('button');
+          $addCartBtn.addEventListener('click',()=>this.addToCartHandler());
           return $prod;
     }
 }
 
-  
-  // 상품 목록에 대한 객체
-  const productList = {
-    products: [
-      p1,
-      p2,
-      new Product(
-        "햄버거",
-        "https://images.chosun.com/resizer/5jStJ5InVS4u3iHvEzB8y_tGrr8=/616x0/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/HV765ADF7VF4FLG5KISDNFMUJ4.PNG",
-        16900,
-        "꽈뜨로 맥씨멈 스테카 버거~"
-      ),
-      new Product(
-        "애플워치",
-        "https://img.danawa.com/prod_img/500000/535/481/img/15481535_1.jpg?_v=20211215103510",
-        400000,
-        "APPLE watch 2세대 2022"
-      ),
-      new Product(
-        "애플망고",
-        "https://m.thegiboon.com/web/product/big/202104/ea08c22e8939ab1977487abc826b8ab8.jpg",
-        60000,
-        "맛있는 맹고~ 당장 사먹어야지~",
-      ),
-    ],
-  
+// 한 개의 UL을 생성하는 클래스
+
+class ProductList{
+    constructor(){
+        // 상품들을 모아놓는 배열
+        this.products = [
+            p1,
+            p2,
+            new Product(
+              "햄버거",
+              "https://images.chosun.com/resizer/5jStJ5InVS4u3iHvEzB8y_tGrr8=/616x0/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/HV765ADF7VF4FLG5KISDNFMUJ4.PNG",
+              16900,
+              "꽈뜨로 맥씨멈 스테카 버거~"
+            ),
+            new Product(
+              "애플워치",
+              "https://img.danawa.com/prod_img/500000/535/481/img/15481535_1.jpg?_v=20211215103510",
+              400000,
+              "APPLE watch 2세대 2022"
+            ),
+            new Product(
+              "애플망고",
+              "https://m.thegiboon.com/web/product/big/202104/ea08c22e8939ab1977487abc826b8ab8.jpg",
+              60000,
+              "맛있는 맹고~ 당장 사먹어야지~",
+            ),
+          ]
+    }// end construct
     render() {
-      // console.log('render!!', this);
-      const $app = document.getElementById("app");
-      const $prodList = document.createElement("ul");
-      $prodList.classList.add("product-list");
-      this.products.forEach((prod) => {
-        //                  { product: {title: ', imageUrl:''},render}
-        
-        const prodeuctItem = new ProductItem(prod);
-        // console.log(prodeuctItem);
-        $prodList.appendChild(prodeuctItem.render());
-      });
-      $app.appendChild($prodList);
-    },
-  };
-  
-  // 렌더링 명령
-  productList.render();
+        // console.log('render!!', this);
+        const $app = document.getElementById("app");
+        const $prodList = document.createElement("ul");
+        $prodList.classList.add("product-list");
+        this.products.forEach((prod) => {
+          //                  { product: {title: ', imageUrl:''},render}
+          
+          const prodeuctItem = new ProductItem(prod);
+          // console.log(prodeuctItem);
+          $prodList.appendChild(prodeuctItem.render());
+        });
+        $app.appendChild($prodList);
+      }
+}
+// 랜더링 명령 
+const productList = new ProductList();
+productList.render();
   
