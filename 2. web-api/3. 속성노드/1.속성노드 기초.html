@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="account" value="abc@def.com">
+
+    <script>
+
+        const $input = document.querySelector('input');
+        console.log($input.attributes.value.value);
+        let input,type,id,value;
+        // $input.attributes.type.value='password';
+        $input.attributes.value.value='hi';
+        $input.attributes.id.value='acc';
+
+        type={
+            name:'type',
+            value: 'email'
+        };
+        id={
+            name:'id',
+            value: 'account'
+        };
+
+        const attributes = {
+            0:type,
+            1:id,
+            2:value,
+            length:3,
+            type:type,
+            id:id,
+            value,value
+        };
+        input = {
+            tagName:'INPUT'
+        };
+    </script>
+</body>
+</html>
