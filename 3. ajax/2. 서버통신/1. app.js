@@ -1,7 +1,15 @@
 
 // UL태그
 const $postUi = document.querySelector('.posts')
-// 서버와 통신하기
+
+// form 태그
+const $addForm = document.querySelector('#new-post form');
+console.log($addForm);
+
+
+// 서버에서 게시물들을 가져와 화면에 렌더링
+const fetchGetPosts = ()=>{
+    // 서버와 통신하기
 const xhr =  new XMLHttpRequest();
 
 // 통신정보 전달
@@ -41,4 +49,41 @@ const xhr =  new XMLHttpRequest();
             `;
             $postUi.appendChild($postLi);
         });
+    };
+};
+const fetchNewPost = (e)=>{
+    e.preventDefault();
+    // console.log('form 제출');
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST','http://localhost:5000/posts');
+    const payload = JSON.stringify({
+        title:document.getElementById('title').value,
+        body:document.getElementById('content').value
+    });
+    xhr.setRequestHeader('content-type','application/json');
+    xhr.send(payload);
+    // 응답 상황 처리
+    xhr.onload = e=>{
+        if(xhr.status===200||xhr.status===201){
+            alert('게시물 등록');
+        }
+        else{
+            alert('등록 실패');
+        }
+    };
+};
+
+fetchGetPosts();
+// 폼태그 전송 이벤트 등록
+$addForm.addEventListener('submit',fetchNewPost);
+
+document.getElementById('go-link').addEventListener('click',e=>{
+    const flag = confirm('ㄹㅇ?');
+    if(!flag){
+        console.log('넌 못지나간당');
+        e.preventDefault(); //태그의 기본 기능을 없애는 함수
+        // 기본기능: a ->링크이동 기능
+        // checkbox -> 체크기능
+        // form 서버에 데이터를 주면서 새로고침
     }
+});
