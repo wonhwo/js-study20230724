@@ -1,0 +1,34 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "얌얌얌,냠냠냠",
+      "body": "흠냠냐먄ㅁ냐먄먀흠냠냐먄ㅁ냐먄먀흠냠냐먄ㅁ냐먄먀"
+    },
+    {
+      "id": 2,
+      "title": "ㅁㄴㅇㄹ,ㅋㅌㅊㄴㅇ",
+      "body": "ㅔㅐㅂㅈ댜김ㄴ어ㅜㅋㅌㅊ"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "account": "abc1234",
+      "userName": "김철수"
+    },
+    {
+      "id": 2,
+      "account": "def1234",
+      "userName": "박영희"
+    },
+    {
+      "id": 3,
+      "account": "zxcv1234",
+      "userName": "엄준식"
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}
