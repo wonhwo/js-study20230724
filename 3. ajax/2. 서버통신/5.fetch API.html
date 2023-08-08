@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <pre></pre>
+    <button id="btn">조회!</button>
+    
+    <script>
+      const clickHandler = (e) => {
+        fetch("http://localhost:5000/posts")
+          .then((response) => response.json())
+          .then((postList) => {
+            console.log(postList);
+            postList.forEach((post) => {
+              document.write(post.title + "<br>");
+            });
+          });
+      };
+      document.getElementById("btn").addEventListener("click", clickHandler);
+    </script>
+  </body>
+</html>
