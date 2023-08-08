@@ -1,19 +1,30 @@
 {
   "posts": [
     {
-      "title": "님폰없?",
-      "body": "ㄹㅇㅋㅋ",
-      "id": 2
+      "title": "냐냐냥",
+      "body": "룰룰루",
+      "id": 4
     },
     {
-      "title": "asdsadqw",
-      "body": "ㄹㅇㅋㅋ",
-      "id": 55
+      "title": "호호호",
+      "body": "히히히",
+      "id": 5
     },
     {
-      "title": "ㅅㅂ",
-      "body": "ㅌㅋㅊㅁㄴㅇㅂㅈㅇ",
-      "id": 56
+      "title": "랄랄라",
+      "body": "룰룰루",
+      "id": 6
     }
-  ]
+  ],
+  "users": [
+    {
+      "id": 1,
+      "userName": "김철수"
+    },
+    {
+      "id": 2,
+      "userName": "뽀로로"
+    }
+  ],
+  "followers": []
 }
