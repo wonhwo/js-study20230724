@@ -26,5 +26,32 @@
       "userName": "뽀로로"
     }
   ],
-  "followers": []
+  "followers": [],
+  "todos": [
+    {
+      "id": 1,
+      "text": "저녁 요리하기",
+      "done": true
+    },
+    {
+      "id": 2,
+      "text": "뉴스 기사 보기",
+      "done": false
+    },
+    {
+      "id": 3,
+      "text": "자바스크립트 공부하기",
+      "done": true
+    },
+    {
+      "text": "되냐?",
+      "done": true,
+      "id": 5
+    },
+    {
+      "text": "아니 ㅆㅃ 서버 문제였음?",
+      "done": false,
+      "id": 6
+    }
+  ]
 }
