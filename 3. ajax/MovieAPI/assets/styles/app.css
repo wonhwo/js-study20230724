@@ -96,11 +96,13 @@ section.todo-template .content .todo-list .todo-list-item .checkbox.checked {
 }
 
 section.todo-template .content .todo-list .todo-list-item .checkbox input {
-
     transform: scale(1.5);
 }
 section.todo-template .content .todo-list .todo-list-item .checkbox .text {
     margin-left: 8px;
+}
+section.todo-template .content .todo-list .todo-list-item .checkbox #ip {
+    margin-left: 45px;
 }
 
 section.todo-template .content .todo-list .todo-list-item .checkbox .modify-input {

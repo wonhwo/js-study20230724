@@ -31,7 +31,7 @@
     {
       "id": 1,
       "text": "저녁 요리하기",
-      "done": true
+      "done": false
     },
     {
       "id": 2,
@@ -39,19 +39,14 @@
       "done": false
     },
     {
-      "id": 3,
-      "text": "자바스크립트 공부하기",
-      "done": true
-    },
-    {
-      "text": "되냐?",
-      "done": true,
-      "id": 5
-    },
-    {
-      "text": "아니 ㅆㅃ 서버 문제였음?",
+      "text": "ㅇㅇㅇㅇㅇ",
       "done": false,
-      "id": 6
+      "id": 3
+    },
+    {
+      "text": "ㄴㅁㅇㄹ",
+      "done": false,
+      "id": 4
     }
   ]
 }

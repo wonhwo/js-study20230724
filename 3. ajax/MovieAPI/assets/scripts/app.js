@@ -4,43 +4,56 @@ const $addBtn = document.getElementById("add");
 const $delBtn = document.querySelector(".remove");
 const rmBtn = document.querySelector("li");
 
+const fetchTodos = (url, method='GET', payload=null) => {
+  const requestInit = {
+    method: method,
+    headers: { 'Content-Type': 'application/json' }
+  };
+  if (payload) requestInit.body = JSON.stringify(payload);
+
+  return fetch(url, requestInit);
+};
 // get 렌더링
-fetch(URL)
+fetchTodos(URL)
   .then((res) => res.json())
   .then((todosList) => {
     const $todosTemplate = document.getElementById("single-post");
     todosList.forEach(({ id, text, done }) => {
       const $postLi = document.importNode($todosTemplate.content, true);
       $postLi.querySelector(".todo-list-item").dataset.id = id;
-      console.log(id);
       $postLi.querySelector("span").textContent = text;
-      todosUl.appendChild($postLi);
+
+        // 체크박스 수정
+        const $checkbox = $postLi.querySelector('.checkbox input[type=checkbox]');
+        $checkbox.checked = done;
+        done && $checkbox.parentNode.classList.add('checked');
+        todosUl.appendChild($postLi);
     });
   });
 //   post 추가
 $addBtn.addEventListener("click", (e) => {
-  e.preventDefault();
   const payload = {
     text: document.getElementById("todo-text").value,
     done: false,
   };
 
-  fetch(URL, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(payload),
+  fetchTodos(URL,'POST',payload)
+  .then(res => {
+    if (res.status === 200 || res.status === 201) {
+      console.log('등록 성공!');
+    } else {
+      console.log('등록 실패!');
+    }
   });
 });
 // delete 삭제
 const buttonHandler = (e) => {
-  
   const id = e.target.closest(".todo-list-item").dataset.id;
   // 삭제
   if (e.target.matches(".lnr-cross-circle")) {
-    console.log(id);
-    fetch(`${URL}/${id}`, {
-      method: "DELETE",
-    }).then((res) => {
+
+    fetchTodos(`${URL}/${id}`,"DELETE")
+    .then((res) => {
       if (res.status === 200) {
         alert("삭제 성공!");
       } else {
@@ -50,57 +63,36 @@ const buttonHandler = (e) => {
   }
   // 수정
   if (e.target.matches(".lnr-undo")) {
-    const inputText = prompt("수정할 이름 입력");
-    fetch(`${URL}/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        text: inputText,
-        done: false,
-      }),
-    }).then((response) => response.json());
+    const $inputText= document.querySelector(".text");
+    console.log("되는겨?");
+    const enterModifyMode = ($undo)=>{
+      // 클래스 이름을 변경하여 아이콘 변경
+      $undo.classList.replace('lnr-undo','lnr-checkmark-circle');
+      // $undo근처에 있는 span.text를 가져와야 함.
+      const $textSpan = $undo.closest('.todo-list-item').querySelector('.text');
+      const $modInput = document.createElement("input");
+      $modInput.classList.add('modify-input');
+      $modInput.setAttribute('type','text');
+      $modInput.value=$textSpan.textContent;
+      const $label = $textSpan.parentNode;
+      $label.replaceChild($modInput,$textSpan);
+      
+      console.log($textSpan);
+      };
+    replaceWithInput();
+    // const inputText = prompt("수정할 이름 입력");
+    // fetchTodos(`${URL}/${id}`,"PATCH",{
+    //   text:inputText
+    // });
   }
-  // 체크박스 수정
-  const $cb = document.querySelectorAll(".checkbox input");
-  $cb.forEach((checkbox)=>{
-    checkbox.addEventListener("change", (event) => {
-      const xhr = new XMLHttpRequest();
-      if(checkbox.checked){
-        event.preventDefault();
-        
-        const fetchPost = () => {
-          // 서버에 수정 요청 (PT,PATCH)
-          const xhr = new XMLHttpRequest();
-          xhr.open("PATCH", `http://localhost:5000/todos/${id}`);
-
-          // 서버로 보낼 데이터(payload)
-          const newPost = {
-            done: true,
-          };
-          // payload 를 보낼 때는 js -> json으로 변환해서 보내야 한다.
-          const payload = JSON.stringify(newPost);
-
-          // 보내는 데이터가 무엇인지 요청 헤더에 적어야한다.
-          xhr.setRequestHeader("content-type", "application/json");
-
-          // 요청 송신 : 데이터를 실어보냄
-
-          xhr.send(payload);
-          
-        };
-          fetchPost();
-        
-      }
-      
-      
-  
-    });
-  });
-
-  
-  
 };
+const checkboxHandler=(e)=>{
+  console.log(e.target.checked); // 현재상태지 이전상태가 아니다
 
+  const id = e.target.closest('.todo-list-item').dataset.id;
+  fetchTodos(`${URL}/${id}`, 'PATCH', {
+    done: e.target.checked
+  });
+}
+todosUl.addEventListener("change", checkboxHandler);
 todosUl.addEventListener("click", buttonHandler);
