@@ -46,6 +46,16 @@ const renderTodos = (todoList) => {
 };
 
 // ========= 이벤트 관련 함수 ========= //
+
+const insertTodo = async(payload)=>{
+  const res = await fetchTodos(URL, 'POST', payload)
+      if (res.status === 200 || res.status === 201) {
+        console.log('등록 성공!');
+      } else {
+        console.log('등록 실패!');
+      }
+   
+}
 const addTodoHandler = e => {
   e.preventDefault();
   // 1. 클릭이벤트가 잘 일어나나?
@@ -73,15 +83,8 @@ const addTodoHandler = e => {
     text: inputText,
     done: false
   };
+  insertTodo(payload);
 
-  fetchTodos(URL, 'POST', payload)
-    .then(res => {
-      if (res.status === 200 || res.status === 201) {
-        console.log('등록 성공!');
-      } else {
-        console.log('등록 실패!');
-      }
-    });
 };
 const $form = document.querySelector(".todo-insert");
 
@@ -95,6 +98,15 @@ $form.addEventListener("keydown",(e)=>{
   }
 });
 
+const removeTod =async(id) =>{
+
+  const res = await fetchTodos(`${URL}/${id}`, 'DELETE')
+    if (res.status === 200) {
+      console.log('삭제 성공!');
+    } else {
+      console.log('삭제 실패!');
+    }
+  }
 
 
 
@@ -109,14 +121,7 @@ const deleteTodoHandler = e => {
   // console.log(id);
   
   // 서버에 삭제 요청하기
-  fetchTodos(`${URL}/${id}`, 'DELETE')
-    .then(res => {
-      if (res.status === 200) {
-        console.log('삭제 성공!');
-      } else {
-        console.log('삭제 실패!');
-      }
-    });
+  removeTod(id);
 };
 
 $todoList.addEventListener('click', deleteTodoHandler);
@@ -132,9 +137,12 @@ const checkTodoHandler = e => {
   console.log(e.target.checked); // 현재상태지 이전상태가 아니다
 
   const id = e.target.closest('.todo-list-item').dataset.id;
-  fetchTodos(`${URL}/${id}`, 'PATCH', {
-    done: e.target.checked
-  });
+
+  (async () => {
+    const res = await fetchTodos(`${URL}/${id}`, 'PATCH', {
+      done: e.target.checked,
+    });
+  })();
 };
 const title = ()=>{
   const $title = document.querySelector(".app-title");
@@ -149,6 +157,7 @@ const title = ()=>{
     $title.textContent=`일정 관리(${i}/${list.length}개 완료)`;
 
   });
+  
 
 }
 
