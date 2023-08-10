@@ -1,0 +1,17 @@
+{
+  "name": "js-study20230724",
+  "version": "1.0.0",
+  "description": "```shell script\r $ mkdir json-server-exam && cd json-server-exam\r $ npm init -y\r $ npm install json-server —D\r ```",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "bootstrap": "^5.3.1",
+    "eslint": "^8.46.0",
+    "eslint-config-google": "^0.14.0",
+    "prettier": "^3.0.1"
+  }
+}

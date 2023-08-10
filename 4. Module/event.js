@@ -1,10 +1,12 @@
 // getDOM.js에서 가져온거
+// eslint-disable-next-line object-curly-spacing
 import { $p as $para } from './getDOM.js';
 
 // event.js에서 만든거
+// eslint-disable-next-line no-unused-vars
 const $p = document.querySelector('p');
 
-export const clickHandler = e => {
+export const clickHandler = (e) => {
   $para.textContent = '하이!';
 };
 

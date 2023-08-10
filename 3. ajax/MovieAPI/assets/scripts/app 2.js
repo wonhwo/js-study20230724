@@ -3,10 +3,10 @@ const URL = 'http://localhost:5000/todos';
 const $todoList = document.querySelector('.todo-list');
 
 // step1. db.json에 있는 todos를 화면에 렌더링하기
-const fetchTodos = (url, method='GET', payload=null) => {
+const fetchTodos = (url, method = 'GET', payload = null) => {
   const requestInit = {
     method: method,
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json' },
   };
   if (payload) requestInit.body = JSON.stringify(payload);
 
@@ -47,16 +47,15 @@ const renderTodos = (todoList) => {
 
 // ========= 이벤트 관련 함수 ========= //
 
-const insertTodo = async(payload)=>{
-  const res = await fetchTodos(URL, 'POST', payload)
-      if (res.status === 200 || res.status === 201) {
-        console.log('등록 성공!');
-      } else {
-        console.log('등록 실패!');
-      }
-   
-}
-const addTodoHandler = e => {
+const insertTodo = async (payload) => {
+  const res = await fetchTodos(URL, 'POST', payload);
+  if (res.status === 200 || res.status === 201) {
+    console.log('등록 성공!');
+  } else {
+    console.log('등록 실패!');
+  }
+};
+const addTodoHandler = (e) => {
   e.preventDefault();
   // 1. 클릭이벤트가 잘 일어나나?
   // console.log('클릭!');
@@ -64,16 +63,20 @@ const addTodoHandler = e => {
   // 2. 클릭하면 일단 왼쪽에 인풋의 텍스트를 읽어야 함.
   // 2-1. 인풋부터 찾자
   const $textInput = document.getElementById('todo-text');
-  
+
   // 2-2. 인풋 안에 텍스트를 꺼내자
   const inputText = $textInput.value;
   const empyText = inputText.split(' ').join('');
- 
-  if(empyText===""|empyText===null|empyText==="공백은허용되지않습니다."){
-    const $workInput = document.querySelector(".todo-insert input");
-    $workInput.setAttribute("placeholder","공백은 허용되지 않습니다.");
+
+  if (
+    (empyText === '') |
+    (empyText === null) |
+    (empyText === '공백은허용되지않습니다.')
+  ) {
+    const $workInput = document.querySelector('.todo-insert input');
+    $workInput.setAttribute('placeholder', '공백은 허용되지 않습니다.');
     $addBtn.addEventListener('click', addTodoHandler);
-    return
+    return;
   }
 
   // 3. 그럼 서버에 이 데이터를 보내서 저장해야 하는데?
@@ -81,37 +84,33 @@ const addTodoHandler = e => {
   // -> payload를 API 스펙에 맞게 만들어 보내야 함
   const payload = {
     text: inputText,
-    done: false
+    done: false,
   };
   insertTodo(payload);
-
 };
-const $form = document.querySelector(".todo-insert");
+const $form = document.querySelector('.todo-insert');
 
-// step2. 할 일 등록 기능 
+// step2. 할 일 등록 기능
 const $addBtn = document.getElementById('add');
-$addBtn.addEventListener("click",addTodoHandler);
+$addBtn.addEventListener('click', addTodoHandler);
 
-$form.addEventListener("keydown",(e)=>{
-  if(e.key==="Enter"){
+$form.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
     addTodoHandler();
   }
 });
 
-const removeTod =async(id) =>{
-
-  const res = await fetchTodos(`${URL}/${id}`, 'DELETE')
-    if (res.status === 200) {
-      console.log('삭제 성공!');
-    } else {
-      console.log('삭제 실패!');
-    }
+const removeTod = async (id) => {
+  const res = await fetchTodos(`${URL}/${id}`, 'DELETE');
+  if (res.status === 200) {
+    console.log('삭제 성공!');
+  } else {
+    console.log('삭제 실패!');
   }
-
-
+};
 
 // step3. 할 일 삭제 기능
-const deleteTodoHandler = e => {
+const deleteTodoHandler = (e) => {
   if (!e.target.matches('.remove span')) return;
 
   if (!confirm('진짜로 삭제합니까??')) return;
@@ -119,19 +118,18 @@ const deleteTodoHandler = e => {
   // 특정 할일을 지우기 위해 클릭한 할일의 id값을 알아야 함
   const id = e.target.closest('.todo-list-item').dataset.id;
   // console.log(id);
-  
+
   // 서버에 삭제 요청하기
   removeTod(id);
 };
 
 $todoList.addEventListener('click', deleteTodoHandler);
 
-
 // step4. 할 일 완료 체크 처리
-const checkTodoHandler = e => {
+const checkTodoHandler = (e) => {
   // console.log('체크박스 누름', e.target);
 
-  // 1. 서버에 수정요청 보내서 누른 그 할일의 
+  // 1. 서버에 수정요청 보내서 누른 그 할일의
   //    done을 반대값으로 수정해야 함.
   // 1-1. 현재 체크값인 t, f인지 알아야 반대로바꾸지
   console.log(e.target.checked); // 현재상태지 이전상태가 아니다
@@ -144,25 +142,23 @@ const checkTodoHandler = e => {
     });
   })();
 };
-const title = ()=>{
-  const $title = document.querySelector(".app-title");
-  let i=0;
-  const asdf = fetchTodos(URL).then((res) => res.json()).then((list)=>{
-    list.forEach(({ id, text, done }) => {
-      if(done){
-        i++;
-      }
+const title = () => {
+  const $title = document.querySelector('.app-title');
+  let i = 0;
+  const asdf = fetchTodos(URL)
+    .then((res) => res.json())
+    .then((list) => {
+      list.forEach(({ id, text, done }) => {
+        if (done) {
+          i++;
+        }
+      });
+
+      $title.textContent = `일정 관리(${i}/${list.length}개 완료)`;
     });
-
-    $title.textContent=`일정 관리(${i}/${list.length}개 완료)`;
-
-  });
-  
-
-}
+};
 
 $todoList.addEventListener('change', checkTodoHandler);
-
 
 // step5. 할일 수정 처리
 
@@ -174,7 +170,7 @@ const enterModifyMode = ($undo) => {
 
   // $undo근처에 있는 span.text를 가져와야 함.
   const $textSpan = $undo.closest('.todo-list-item').querySelector('.text');
-  
+
   // 교체할 input을 생성
   const $modInput = document.createElement('input');
   $modInput.classList.add('modify-input');
@@ -190,14 +186,14 @@ const modifyTodo = ($checkMark) => {
   const $li = $checkMark.closest('.todo-list-item');
   const id = $li.dataset.id;
   const newText = $li.querySelector('.modify-input').value;
-  
+
   fetchTodos(`${URL}/${id}`, 'PATCH', {
-    text: newText
+    text: newText,
   });
 };
 
 // 수정 이벤트 처리 핸들러
-const modifyTodoHandler = e => {
+const modifyTodoHandler = (e) => {
   if (e.target.matches('.modify span.lnr-undo')) {
     enterModifyMode(e.target); // 수정 모드 진입하기
   } else if (e.target.matches('.modify span.lnr-checkmark-circle')) {
@@ -207,12 +203,11 @@ const modifyTodoHandler = e => {
 $todoList.addEventListener('click', modifyTodoHandler);
 // 일정관리 그거
 
-
 // =========== 앱 실행 =========== //
 const init = () => {
   fetchTodos(URL)
-    .then(res => res.json())
-    .then(todos => {
+    .then((res) => res.json())
+    .then((todos) => {
       renderTodos(todos);
     });
 };
