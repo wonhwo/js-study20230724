@@ -12,6 +12,16 @@ const fetchTodos = (url, method='GET', payload=null) => {
 
   return fetch(url, requestInit);
 };
+// const renderRestTodo = todoList=>{
+//   const totalTodos = todoList.length;
+//   const restTodos = todoList.filter(todo=>todo.done).length;
+
+//   const $rest = document.querySelector('.rest-todo');
+//   if(totalTodos>0){
+//     $rest.textContent=`${restTodos} / ${totalTodos}`;
+//   }
+// }
+// 화면에 todos를 렌더링하는 함수
 
 // 화면에 todos를 렌더링하는 함수
 const renderTodos = (todoList) => {
@@ -28,10 +38,8 @@ const renderTodos = (todoList) => {
     const $checkbox = $newLi.querySelector('.checkbox input[type=checkbox]');
     // console.dir($checkbox);
     $checkbox.checked = done;
-    if(!$checkbox.checked){
-      !done && $checkbox.parentNode.classList.add('checked');
 
-    }
+    done && $checkbox.parentNode.classList.add('checked');
 
     $todoList.appendChild($newLi);
   });
@@ -39,14 +47,24 @@ const renderTodos = (todoList) => {
 
 // ========= 이벤트 관련 함수 ========= //
 const addTodoHandler = e => {
+  e.preventDefault();
   // 1. 클릭이벤트가 잘 일어나나?
   // console.log('클릭!');
 
   // 2. 클릭하면 일단 왼쪽에 인풋의 텍스트를 읽어야 함.
   // 2-1. 인풋부터 찾자
   const $textInput = document.getElementById('todo-text');
+  
   // 2-2. 인풋 안에 텍스트를 꺼내자
   const inputText = $textInput.value;
+  const empyText = inputText.split(' ').join('');
+ 
+  if(empyText===""|empyText===null|empyText==="공백은허용되지않습니다."){
+    const $workInput = document.querySelector(".todo-insert input");
+    $workInput.setAttribute("placeholder","공백은 허용되지 않습니다.");
+    $addBtn.addEventListener('click', addTodoHandler);
+    return
+  }
 
   // 3. 그럼 서버에 이 데이터를 보내서 저장해야 하는데?
   // -> fetch가 필요하겠다. 저장이니까 POST해야겠다.
@@ -55,6 +73,7 @@ const addTodoHandler = e => {
     text: inputText,
     done: false
   };
+
   fetchTodos(URL, 'POST', payload)
     .then(res => {
       if (res.status === 200 || res.status === 201) {
@@ -64,10 +83,20 @@ const addTodoHandler = e => {
       }
     });
 };
+const $form = document.querySelector(".todo-insert");
 
 // step2. 할 일 등록 기능 
 const $addBtn = document.getElementById('add');
-$addBtn.addEventListener('click', addTodoHandler);
+$addBtn.addEventListener("click",addTodoHandler);
+
+$form.addEventListener("keydown",(e)=>{
+  if(e.key==="Enter"){
+    addTodoHandler();
+  }
+});
+
+
+
 
 // step3. 할 일 삭제 기능
 const deleteTodoHandler = e => {
@@ -107,40 +136,68 @@ const checkTodoHandler = e => {
     done: e.target.checked
   });
 };
+const title = ()=>{
+  const $title = document.querySelector(".app-title");
+  let i=0;
+  const asdf = fetchTodos(URL).then((res) => res.json()).then((list)=>{
+    list.forEach(({ id, text, done }) => {
+      if(done){
+        i++;
+      }
+    });
 
-// 할일 수정처리
-const enterModifyMode = ($undo)=>{
-// 클래스 이름을 변경하여 아이콘 변경
-$undo.classList.replace('lnr-undo','lnr-checkmark-circle');
-// $undo근처에 있는 span.text를 가져와야 함.
-const $textSpan = $undo.closest('.todo-list-item').querySelector('.text');
-const $modInput = document.createElement("input");
-$modInput.classList.add('modify-input');
-$modInput.setAttribute('type','text');
-$modInput.value=$textSpan.textContent;
-const $label = $textSpan.parentNode;
-$label.replaceChild($modInput,$textSpan);
+    $title.textContent=`일정 관리(${i}/${list.length}개 완료)`;
 
-};
-const modifyTodo = ($checkMark)=>{
-  const $li = $checkMark.closest('.todo-list-item');
-  const id=$li.dataset.id;
-  const newText = $li.querySelector('.modify-input').value;
-  fetchTodos(`${URI}/${id}`,'PATCH',{
-    text:newText
   });
-};
-const modifyTodoHandler = e=>{
-  if(e.target.matches('.modify span.lnr-undo')){
-    enterModifyMode(e.target);
-  }else if(e.target.matches('.modify span.lnr-checkmark-circle')){
-    modifyTodo(e.target);//서버에 수정 요청 보내깅
-  }
-  
+
 }
-$todoList.addEventListener('click', modifyTodoHandler);
 
 $todoList.addEventListener('change', checkTodoHandler);
+
+
+// step5. 할일 수정 처리
+
+// 수정 모드 진입하는 함수
+const enterModifyMode = ($undo) => {
+  // 클래스 이름을 변경하여 아이콘을 바꾸자
+  // -> 클릭한 span태그 노드를 가져와야 함.
+  $undo.classList.replace('lnr-undo', 'lnr-checkmark-circle');
+
+  // $undo근처에 있는 span.text를 가져와야 함.
+  const $textSpan = $undo.closest('.todo-list-item').querySelector('.text');
+  
+  // 교체할 input을 생성
+  const $modInput = document.createElement('input');
+  $modInput.classList.add('modify-input');
+  $modInput.setAttribute('type', 'text');
+  $modInput.value = $textSpan.textContent;
+
+  // span을 input으로 교체하기
+  const $label = $textSpan.parentNode;
+  $label.replaceChild($modInput, $textSpan);
+};
+
+const modifyTodo = ($checkMark) => {
+  const $li = $checkMark.closest('.todo-list-item');
+  const id = $li.dataset.id;
+  const newText = $li.querySelector('.modify-input').value;
+  
+  fetchTodos(`${URL}/${id}`, 'PATCH', {
+    text: newText
+  });
+};
+
+// 수정 이벤트 처리 핸들러
+const modifyTodoHandler = e => {
+  if (e.target.matches('.modify span.lnr-undo')) {
+    enterModifyMode(e.target); // 수정 모드 진입하기
+  } else if (e.target.matches('.modify span.lnr-checkmark-circle')) {
+    modifyTodo(e.target); // 서버에 수정 요청 보내기
+  }
+};
+$todoList.addEventListener('click', modifyTodoHandler);
+// 일정관리 그거
+
 
 // =========== 앱 실행 =========== //
 const init = () => {
@@ -152,3 +209,4 @@ const init = () => {
 };
 
 init();
+title();

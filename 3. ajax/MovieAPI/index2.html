@@ -20,12 +20,11 @@
 
 </head>
 <body>
-<!-- 동적으로 렌더링될 태그를 템플릿화 -->
-  <template id="single-post">
-    <li class="post-item">
-        <li data-id="" class="todo-list-item">
-            <label class="checkbox "id="cb">
-                <input type="checkbox">
+
+    <template id="single-post">
+        <li data-id="" class="todo-list-item" >
+            <label class="checkbox">
+                <input type="checkbox" id>
                 <span class="text"></span>
             </label>
             <div class="modify">
@@ -35,8 +34,8 @@
                 <span class="lnr lnr-cross-circle"></span>
             </div>
         </li>
-    </li>
-  </template>
+    </template>
+
     <div class="wrapper">
         <section class="todo-template">
             <h1 class="app-title">일정 관리</h1>

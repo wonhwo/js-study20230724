@@ -64,7 +64,6 @@ const buttonHandler = (e) => {
   // 수정
   if (e.target.matches(".lnr-undo")) {
     const $inputText= document.querySelector(".text");
-    console.log("되는겨?");
     const enterModifyMode = ($undo)=>{
       // 클래스 이름을 변경하여 아이콘 변경
       $undo.classList.replace('lnr-undo','lnr-checkmark-circle');
@@ -77,13 +76,23 @@ const buttonHandler = (e) => {
       const $label = $textSpan.parentNode;
       $label.replaceChild($modInput,$textSpan);
       
-      console.log($textSpan);
       };
-    replaceWithInput();
-    // const inputText = prompt("수정할 이름 입력");
-    // fetchTodos(`${URL}/${id}`,"PATCH",{
-    //   text:inputText
-    // });
+      const modifyTodo = ($checkMark)=>{
+        const $li = $checkMark.closest('.todo-list-item');
+        const id=$li.dataset.id;
+        const newText = $li.querySelector('.modify-input').value;
+        fetchTodos(`${URI}/${id}`,'PATCH',{
+          text:newText
+        });
+      };
+      const modifyTodoHandler = e=>{
+        if(e.target.matches('.modify span.lnr-undo')){
+          enterModifyMode(e.target);
+        }else if(e.target.matches('.modify span.lnr-checkmark-circle')){
+          modifyTodo(e.target);//서버에 수정 요청 보내깅
+        }
+      }
+    enterModifyMode(e.target);
   }
 };
 const checkboxHandler=(e)=>{
